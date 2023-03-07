@@ -1,0 +1,12 @@
+[Unit]
+Description=serve myapp
+After=network.target
+
+[Service]
+User=sanaz
+Group=www-data
+WorkingDirectory=/home/sanaz/rabbit/Topics
+ExecStart=/home/sanaz/.virtualenvs/RabbitMQ_project/bin/python receive.py
+
+[Install]
+WantedBy=multi-user.target
