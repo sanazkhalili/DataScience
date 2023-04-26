@@ -1,4 +1,5 @@
-## First Step:
+Creat a gunicorn service in ubuntu:
+
 1) Create a file named file.service in "/etc/systemd/system".
 
 2) Run below command after that activate virtual enviroment:
