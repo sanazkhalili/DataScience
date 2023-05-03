@@ -5,6 +5,8 @@ from kafka.admin import NewTopic
 admin_kafka = KafkaAdminClient(bootstrap_servers = ['192.168.241.128:9092'])
 list_topics = admin_kafka.list_topics()
 print(list_topics)
+print(admin_kafka.list_consumer_groups())
+print(admin_kafka.DEFAULT_CONFIG.keys())
 
 ### kafka producer
 kafka_pro = KafkaProducer(bootstrap_servers=['192.168.241.128:9092'])
@@ -19,36 +21,6 @@ kafka_cons = KafkaConsumer("topic1",
 for i in kafka_cons:
     print(i.value)
 
-
-
-
-
-
-
-
-
-
-
-
-from kafka import KafkaConsumer, KafkaProducer
-from kafka.admin import NewTopic
-
-import kafka
-
-admin_kafka = kafka.KafkaAdminClient(bootstrap_servers=['192.168.241.128:9092'])
-print(admin_kafka.list_consumer_groups())
-print(admin_kafka.DEFAULT_CONFIG.keys())
-print(admin_kafka.list_topics())
-
-
-'''prod = KafkaProducer(bootstrap_servers=['192.168.241.128:9092'])
-prod.send('sanaz', "hello my dear sanaz".encode())
-prod.flush()'''
-
-cons = KafkaConsumer('sanaz',bootstrap_servers = ['192.168.241.128:9092'],
-                     auto_offset_reset='earliest')
-'''for i in cons:
-    print(i.value)
-'''
-#new_topic_name = NewTopic ( name = "yasna", num_partitions = 1, replication_factor = 1 )
-#admin_kafka.create_topics(new_topics = [new_topic_name]   , validate_only = False)
+### Create new topic
+new_topic_name = NewTopic ( name = "yasna", num_partitions = 1, replication_factor = 1 )
+admin_kafka.create_topics(new_topics = [new_topic_name]   , validate_only = False)
