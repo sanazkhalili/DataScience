@@ -226,17 +226,204 @@ POST covid/_update/PvkKl4YBI3fidKnBlJpW
 GET covid/_doc/PvkKl4YBI3fidKnBlJpW
 ```
 
-یک تمپلیت 
+14)ساخت runtime field
+```
+POST covid/_mapping
+{
+  "runtime": {
+    "FIELD2": {
+      "type": "long",
+      "script": {
+        "source": "if (doc['deaths'].size() > 0){emit(doc['deaths'].value)}"
+      }
+    }
+  }
+}
+```
+15) ساخت template
+```
+PUT _component_template/temp_mapp
+{
+  "template": {
+    "mappings": {
+      "properties": {
+        "name":{"type": "text"},
+        "time":{"type": "date"}
+      }
+    }
+  }
+}
+```
+```
+PUT _component_template/temp_setting
+{
+  "template": {
+    "settings": {
+      "number_of_shards": 2,
+      "number_of_replicas": 2
+    }
+  }
+}
+```
+```
+PUT _component_template/temp_alias
+{
+  "template": {
+    "aliases": {
+      "test_temp_alias": {
+        "filter": {
+          "range": {
+            "date": {
+              "gte": "2021-02-03",
+              "lte": "2021-04-03"
+            }
+          }
+        }
+      }
+    }
+  }
+}
 
-ساخت آنالایزر
+```
+```
+PUT _index_template/temp_index
+{
+  "index_patterns": ["*user"],
+  "composed_of":["temp_alias", "temp_setting","temp_mapp"],
+  "priority":500
+}
+```
+```
+PUT student_user
+```
+```
+GET stdent_user
+```
+16)ساخت آنالایزر
+```
+PUT my-index-000001
+{
+   "settings":{
+      "analysis":{
+         "analyzer":{
+            "my_analyzer":{ 
+               "type":"custom",
+               "tokenizer":"standard",
+               "filter":[
+                  "lowercase"
+               ]
+            },
+            "my_stop_analyzer":{ 
+               "type":"custom",
+               "tokenizer":"standard",
+               "filter":[
+                  "lowercase",
+                  "english_stop"
+               ]
+            }
+         },
+         "filter":{
+            "english_stop":{
+               "type":"stop",
+               "stopwords":"_english_"
+            }
+         }
+      }
+   },
+   "mappings":{
+       "properties":{
+          "title": {
+             "type":"text",
+             "analyzer":"my_analyzer", 
+             "search_analyzer":"my_stop_analyzer", 
+             "search_quote_analyzer":"my_analyzer" 
+         }
+      }
+   }
+}
+```
 
-ساخت یک alias
 
-عمل upsert
+17)ساخت یک alias
+```
+POST _aliases
+{
+  "actions": [
+    {
+      "add": {
+        "index": "test_index",
+        "alias": "alias2",
+        "filter": {
+          "range": {
+            "number": {
+              "gte": 10,
+              "lte": 20
+            }
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+18)عمل upsert
+```
+POST covid/_update/QPkKl4YBI3fidKnBlJpW1
+{
+  "script": {"source": "ctx._source.name='Russia'"},
+  "upsert": {
+    "name":"san"
+  }
+}
 
 
-ساخت runtime field
+GET covid/_search
+{
+  "query": {
+    "match": {
+      "name": "san"
+    }
+  }
+}
+```
 
+20)متفرقه
+```
+GET covid/_search
+{
+  "query": {
+    "fuzzy": {
+      "country.keyword": {
+        "value": "Ita", 
+        "fuzziness": 2
+      }
+    }
+  }
+}
+```
+differnet wildcard and regex
+https://reqchecker.eu/manual/extract_syntax.html
+```
+GET covid/_search
+{
+  "query": {
+    "wildcard": {
+      "country.keyword": {
+        "value": "I*"
+      }
+    }
+  }
+}
+```
 
-
-
+```
+GET covid/_search
+{
+  "query": {
+    "regexp": {
+      "country.keyword": "I[a-z]*"
+    }
+  }
+}
+```
