@@ -20,13 +20,13 @@ FROM employees
 ```
 
 از هر کدام از شفل ها چند کارمند دارد
-``
+
+```
 SELECT jobTitle, COUNT(jobTitle)
 FROM employees
 GROUP BY jobTitle
 HAVING LIKE jobTitle 's%'
 ```
-
 اضافه کردن ستون id به جدول قبل
 ```
 ALTER TABLE test1234
@@ -147,8 +147,8 @@ FOR EACH ROW
 begin
 INSERT INTO test1234(id, name, family, age) VALUES(12, 'ddd','ssss',22);
 END
-```
-```
+
+
 UPDATE employees SET firstName='amirreza' WHERE email='sanaz'
 ```
 view 
@@ -181,4 +181,5 @@ DROP PROCEDURE test_pro
 SET @name=null;
 call test_pro('l%',@name)
 ```
+
 
