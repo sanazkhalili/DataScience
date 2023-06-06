@@ -182,4 +182,16 @@ SET @name=null;
 call test_pro('l%',@name)
 ```
 
+median for a column
+```
+
+SELECT * FROM (
+  SELECT
+    ROW_NUMBER() OVER (ORDER BY employeeNumber ASC) AS rownumber,
+		employees.employeeNumber
+  FROM employees
+) AS sort_rows
+WHERE rownumber = (SELECT FLOOR(count(employees.employeeNumber)/2) 
+                    from employees)
+```
 
