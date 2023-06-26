@@ -1,11 +1,14 @@
-django-admin.exe startproject myproject .
-python .\manage.py startapp home
+#### django-admin.exe startproject myproject .
 
-Add a urls.py in home app folder
-Add a template file in the project
+#### python .\manage.py startapp home
 
-install mysqlclient with pip
-change 
+#### Add a urls.py in home app folder
+#### Add a template file in the project
+
+#### install mysqlclient with pip
+
+#### change 
+```
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -16,14 +19,18 @@ DATABASES = {
         'PORT': 'your_port',  # Typically '3306'
     }
 } 
-in settings file.
-then :
+```
+
+##### in settings file.
+##### then :
+```
 python .\manage.py migrate  
 python .\manage.py makemigrations
+```
+##### Add models in models file
 
-Add models in models file
-
-Add "home.apps.HomeConfig" to INSTALLED_APPS
+##### Add "home.apps.HomeConfig" to INSTALLED_APPS
+```
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -33,9 +40,9 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "home.apps.HomeConfig"
 ]
+```
+##### Add "DIRS": [BASE_DIR/"templates"] to TEMPLATES in setting file
 
-Add "DIRS": [BASE_DIR/"templates"] to TEMPLATES in setting file
+##### Create a templates folder in home
 
-Create a templates folder in home
-
-Use render in a function in views that show all students in show_list.html
+##### Use render in a function in views that show all students in show_list.html
